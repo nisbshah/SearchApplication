@@ -43,7 +43,6 @@ public class DocumentSearchAdapter {
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
     QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("PLAN_NAME", planName));
     sourceBuilder.query(queryBuilder);
-    sourceBuilder.size(5);
 
     SearchRequest searchRequest = new SearchRequest();
     searchRequest.indices(INDEX);
@@ -63,7 +62,6 @@ public class DocumentSearchAdapter {
     QueryBuilder queryBuilder =
         QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("SPONSOR_DFE_NAME", sponsorName));
     sourceBuilder.query(queryBuilder);
-    sourceBuilder.size(5);
 
     SearchRequest searchRequest = new SearchRequest();
     searchRequest.indices(INDEX);
