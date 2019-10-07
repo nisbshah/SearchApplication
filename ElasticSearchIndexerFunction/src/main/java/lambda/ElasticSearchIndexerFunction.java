@@ -22,8 +22,6 @@ import utilities.ParserUtils;
 
 public class ElasticSearchIndexerFunction implements RequestHandler<S3Event, String> {
 
-  private static final String SERVICE = "es";
-  private static final String REGION = "us-west-2";
   //private static final Logger logger = LoggerFactory.getLogger(ElasticSearchIndexerFunction.class);
   private final AmazonS3 s3 = AmazonS3ClientBuilder.standard().build();
 
@@ -52,7 +50,7 @@ public class ElasticSearchIndexerFunction implements RequestHandler<S3Event, Str
       System.out.println("Size of the list of maps: " + jsonStringMapList.size());
 
       for (Map<String, String> jsonMap : jsonStringMapList) {
-        DocumentsLoaderAdapter.sendDocsToES(SERVICE, REGION, jsonMap);
+        DocumentsLoaderAdapter.sendDocsToES(jsonMap);
         totalDocsCount += jsonMap.size();
         System.out.println("Total Items loaded to ES until now: " + totalDocsCount);
       }

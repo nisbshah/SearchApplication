@@ -60,12 +60,28 @@ Resources:
                   - Name: suffix
                     Value: .csv
 
+  SearchFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ElasticSearchIndexerFunction
+      Handler: lambda.SearchFunction::handleRequest
+      Runtime: java8
+      # Role: !GetAtt LambdaExecutionRole.Arn
+      MemorySize: 512
+      Timeout: 300
+      Events:
+        SearchApi:
+          Type: Api
+          Properties:
+            Path: '/search'
+            Method: get
+
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldFunction:
+  ElasticSearchIndexerFunction:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt ElasticSearchIndexerFunction.Arn
-  HelloWorldFunctionIamRole:
+  ElasticSearchIndexerFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt ElasticSearchIndexerFunction.Arn

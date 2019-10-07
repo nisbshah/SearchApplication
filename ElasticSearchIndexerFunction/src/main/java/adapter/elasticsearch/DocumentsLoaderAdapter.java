@@ -37,10 +37,9 @@ public class DocumentsLoaderAdapter {
   private static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
 
-  public static void sendDocsToES(String serviceName, String region, Map<String, String> jsonStringMap)
-      throws Exception {
+  public static void sendDocsToES(Map<String, String> jsonStringMap) throws Exception {
 
-    RestHighLevelClient esClient = getEsClient(serviceName, region);
+    RestHighLevelClient esClient = getEsClient(SERVICE, REGION);
     ensureIndexExist(esClient);
     esClient.close();
 
@@ -58,7 +57,7 @@ public class DocumentsLoaderAdapter {
       count++;
 
       if (count == batch) {
-        esClient = getEsClient(serviceName, region);
+        esClient = getEsClient(SERVICE, REGION);
         BulkResponse response = esClient.bulk(bulkRequest, RequestOptions.DEFAULT);
         count = 0;
         if (response.hasFailures()) {
@@ -70,7 +69,7 @@ public class DocumentsLoaderAdapter {
     }
 
     if (bulkRequest.estimatedSizeInBytes() != 0) {
-      esClient = getEsClient(serviceName, region);
+      esClient = getEsClient(SERVICE, REGION);
       BulkResponse response = esClient.bulk(bulkRequest, RequestOptions.DEFAULT);
       esClient.close();
 
