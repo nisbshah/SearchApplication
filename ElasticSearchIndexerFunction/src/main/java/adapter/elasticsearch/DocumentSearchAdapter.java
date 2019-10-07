@@ -29,8 +29,6 @@ public class DocumentSearchAdapter {
 
   private static final String SERVICE = "es";
   private static final String REGION = "us-west-2";
-  /*private static final String aesEndpoint =
-      "https://search-manual-v7e5z2ptfxutqy2rvte2s7qfnm.us-west-2.es.amazonaws.com";*/
   private static String aesEndpoint;
   private static final String INDEX = "plans";
   private static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();

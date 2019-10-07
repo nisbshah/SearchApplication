@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2019 Financial Engines, Inc.  All Rights Reserved.
- * Sunnyvale, CA
- *
- * File: DocumentsLoaderAdapter.java
- * Author: nishah
- */
-
 package adapter.elasticsearch;
 
 import org.apache.http.HttpHost;

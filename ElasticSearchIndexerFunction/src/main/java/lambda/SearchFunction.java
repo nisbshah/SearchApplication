@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2019 Financial Engines, Inc.  All Rights Reserved.
- * Sunnyvale, CA
- *
- * File: SearchFunction.java
- * Author: nishah
- */
-
 package lambda;
 
 import org.json.simple.JSONObject;

@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2019 Financial Engines, Inc.  All Rights Reserved.
- * Sunnyvale, CA
- *
- * File: ElasticSearchIndexerFunction.java
- * Author: nishah
- */
-
 package lambda;
 
 import org.slf4j.MDC;

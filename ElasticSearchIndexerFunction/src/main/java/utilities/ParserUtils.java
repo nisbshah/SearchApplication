@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2019 Financial Engines, Inc.  All Rights Reserved.
- * Sunnyvale, CA
- *
- * File: ParserUtils.java
- * Author: nishah
- */
-
 package utilities;
 
 import org.apache.commons.csv.CSVFormat;
