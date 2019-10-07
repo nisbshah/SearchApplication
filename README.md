@@ -26,7 +26,7 @@ This project contains source code and supporting files for a serverless applicat
 #### Search by Plan Name
 ```bash
 curl -X GET \
-  'https://13n0tkqquk.execute-api.us-west-2.amazonaws.com/Prod/search?key=planname&value=PREMIUM%20INSPECTION%20& TESTING, INC. 401K PLAN 401K PLAN=&%20TESTING,%20INC.%20401K%20PLAN%20401K%20PLAN='
+  'https://13n0tkqquk.execute-api.us-west-2.amazonaws.com/Prod/search?key=planname&value=INNOVATIVE%20HEALTH%20MANAGEMENT%20PARTNER%20LLC'
 ```
 
 #### Search by Sponsor Name
