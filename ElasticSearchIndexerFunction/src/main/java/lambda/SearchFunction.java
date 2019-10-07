@@ -31,43 +31,38 @@ public class SearchFunction implements RequestStreamHandler {
       throws IOException {
 
     JSONParser parser = new JSONParser();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     JSONObject responseJson = new JSONObject();
     String responseBody = null;
 
     try {
+      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
       JSONObject event = (JSONObject) parser.parse(reader);
       if (event.get("queryStringParameters") == null) {
         throw new IllegalArgumentException("Bad request");
       }
 
-      JSONObject qps = (JSONObject) event.get("queryStringParameters");
-      if (qps.get("key") == null || qps.get("value") == null) {
+      JSONObject queryStringParameters = (JSONObject) event.get("queryStringParameters");
+      if (queryStringParameters.get("key") == null || queryStringParameters.get("value") == null) {
         throw new IllegalArgumentException("Bad request");
       }
 
-      String searchKey = (String) qps.get("key");
-      String searchValue = (String) qps.get("value");
+      String searchKey = (String) queryStringParameters.get("key");
+      String searchValue = (String) queryStringParameters.get("value");
 
       SearchService searchService = new SearchService();
       List<PlanDetails> planDetailsList = searchService.getPlanDetails(searchKey, searchValue);
       responseBody = objectMapper.writeValueAsString(planDetailsList);
 
-
-      //JSONObject headerJson = new JSONObject();
-      //headerJson.put("x-custom-header", "my custom header value");
-
       responseJson.put("statusCode", 200);
-      //responseJson.put("headers", headerJson);
       responseJson.put("body", responseBody);
 
     } catch (Exception ex) {
       responseJson.put("statusCode", 400);
-      responseJson.put("exception", ex);
+      responseJson.put("body", ex.getMessage());
+    } finally {
+      OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+      writer.write(responseJson.toString());
+      writer.close();
     }
-
-    OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
-    writer.write(responseJson.toString());
-    writer.close();
   }
 }
