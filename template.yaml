@@ -1,16 +1,35 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  AWS
+Description: Search Application Resources
 
-  Sample SAM Template for AWS
-
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 20
 
 Resources:
+  ElasticsearchDomain:
+    Type: 'AWS::Elasticsearch::Domain'
+    Properties:
+      DomainName: 'retirementplans'
+      AccessPolicies:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'es:ESHttp*'
+            Resource: !Sub 'arn:aws:es:${AWS::Region}:${AWS::AccountId}:domain/retirementplans/*'
+      EBSOptions:
+        EBSEnabled: 'true'
+        VolumeSize: 10
+        VolumeType: gp2
+      ElasticsearchClusterConfig:
+        InstanceCount: "2"
+        ZoneAwarenessEnabled: "true"
+        InstanceType: "m3.medium.elasticsearch"
+      ElasticsearchVersion: '7.1'
+
   s3BucketSearchApp:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
@@ -48,6 +67,9 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: 3008
       Timeout: 900
+      Environment:
+        Variables:
+          ES_ENDPOINT: !GetAtt ElasticsearchDomain.DomainEndpoint
       Events:
         SearchApp:
           Type: S3
@@ -69,6 +91,9 @@ Resources:
       # Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: 512
       Timeout: 300
+      Environment:
+        Variables:
+          ES_ENDPOINT: !GetAtt ElasticsearchDomain.DomainEndpoint
       Events:
         SearchApi:
           Type: Api
@@ -78,7 +103,10 @@ Resources:
 
 
 Outputs:
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  DomainArn:
+    Value: !GetAtt ElasticsearchDomain.DomainArn
+  DomainEndpoint:
+    Value: !GetAtt ElasticsearchDomain.DomainEndpoint
   ElasticSearchIndexerFunction:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt ElasticSearchIndexerFunction.Arn

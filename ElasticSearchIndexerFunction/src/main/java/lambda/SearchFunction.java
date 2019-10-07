@@ -10,6 +10,7 @@ package lambda;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.MDC;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import java.util.List;
 import adapter.elasticsearch.adapter.elasticsearch.dto.PlanDetails;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.amazonaws.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import service.search.SearchService;
 
@@ -35,6 +37,12 @@ public class SearchFunction implements RequestStreamHandler {
     String responseBody = null;
 
     try {
+      String esEndpoint = System.getenv("ES_ENDPOINT");
+      if (StringUtils.isNullOrEmpty(esEndpoint)) {
+        throw new IllegalArgumentException("Bad setup");
+      }
+      MDC.put("esEndpoint", esEndpoint);
+
       BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
       JSONObject event = (JSONObject) parser.parse(reader);
       if (event.get("queryStringParameters") == null) {

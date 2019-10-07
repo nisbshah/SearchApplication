@@ -20,6 +20,7 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.slf4j.MDC;
 import java.io.IOException;
 import java.util.Map;
 import aws.helpers.AWSRequestSigningApacheInterceptor;
@@ -30,8 +31,9 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 public class DocumentsLoaderAdapter {
   private static final String SERVICE = "es";
   private static final String REGION = "us-west-2";
-  private static final String aesEndpoint =
-      "https://search-manual-v7e5z2ptfxutqy2rvte2s7qfnm.us-west-2.es.amazonaws.com";
+  /*private static final String aesEndpoint =
+      "https://search-manual-v7e5z2ptfxutqy2rvte2s7qfnm.us-west-2.es.amazonaws.com";*/
+  private static String aesEndpoint;
   private static final String INDEX = "plans";
   private static final String TYPE = "doc";
   private static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
@@ -39,6 +41,7 @@ public class DocumentsLoaderAdapter {
 
   public static void sendDocsToES(Map<String, String> jsonStringMap) throws Exception {
 
+    aesEndpoint = "https://" + MDC.get("esEndpoint");
     RestHighLevelClient esClient = getEsClient(SERVICE, REGION);
     ensureIndexExist(esClient);
     esClient.close();

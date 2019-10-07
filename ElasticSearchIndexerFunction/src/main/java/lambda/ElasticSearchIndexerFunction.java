@@ -8,6 +8,7 @@
 
 package lambda;
 
+import org.slf4j.MDC;
 import java.util.List;
 import java.util.Map;
 import adapter.elasticsearch.DocumentsLoaderAdapter;
@@ -18,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.util.StringUtils;
 import utilities.ParserUtils;
 
 public class ElasticSearchIndexerFunction implements RequestHandler<S3Event, String> {
@@ -36,6 +38,13 @@ public class ElasticSearchIndexerFunction implements RequestHandler<S3Event, Str
   @Override
   public String handleRequest(S3Event event, Context context) {
     System.out.println("Received event: " + event);
+    String esEndpoint = System.getenv("ES_ENDPOINT");
+    System.out.println("esEndpoint: " + esEndpoint);
+    if (StringUtils.isNullOrEmpty(esEndpoint)) {
+      throw new IllegalArgumentException("Bad setup");
+    }
+    MDC.put("esEndpoint", esEndpoint);
+
     int totalDocsCount = 0;
 
     try {

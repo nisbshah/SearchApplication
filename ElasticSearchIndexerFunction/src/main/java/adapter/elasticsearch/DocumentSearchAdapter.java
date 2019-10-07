@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.slf4j.MDC;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,9 @@ public class DocumentSearchAdapter {
 
   private static final String SERVICE = "es";
   private static final String REGION = "us-west-2";
-  private static final String aesEndpoint =
-      "https://search-manual-v7e5z2ptfxutqy2rvte2s7qfnm.us-west-2.es.amazonaws.com";
+  /*private static final String aesEndpoint =
+      "https://search-manual-v7e5z2ptfxutqy2rvte2s7qfnm.us-west-2.es.amazonaws.com";*/
+  private static String aesEndpoint;
   private static final String INDEX = "plans";
   private static final AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
@@ -37,7 +39,7 @@ public class DocumentSearchAdapter {
       new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   public List<PlanDetails> searchByPlan(String planName) throws Exception {
-
+    aesEndpoint = "https://" + MDC.get("esEndpoint");
     RestHighLevelClient client = getEsClient(SERVICE, REGION);
 
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -55,7 +57,7 @@ public class DocumentSearchAdapter {
   }
 
   public List<PlanDetails> searchBySponsorName(String sponsorName) throws Exception {
-
+    aesEndpoint = "https://" + MDC.get("esEndpoint");
     RestHighLevelClient client = getEsClient(SERVICE, REGION);
 
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -74,7 +76,7 @@ public class DocumentSearchAdapter {
   }
 
   public List<PlanDetails> searchByState(String stateCode) throws Exception {
-
+    aesEndpoint = "https://" + MDC.get("esEndpoint");
     RestHighLevelClient client = getEsClient(SERVICE, REGION);
 
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
