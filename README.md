@@ -1,13 +1,14 @@
 # Retirement plan Search Application
 
-This project contains source code and supporting files for a serverless application to search the Retirement plans based on the Plan Name, Sponsor Name and State. The application is divided in to the following 2 parts,
+This project contains source code and supporting files for a serverless application to search the Retirement plans based on the Plan Name, Sponsor Name and State. Test Data - http://askebsa.dol.gov/FOIA%20Files/2017/Latest/F_5500_2017_Latest.zip
 
-1) Loading all the data into the Elastic Search
+The application is divided in to the following 2 parts,
+1) Loading all the data into the Elastic Search cluster using AWS lambda making calls using Elastic Search SDK
 2) Expose an API using Api gateway and Lambda to search on Elastic Search
 
 ### Loading all the data into the Elastic Search
 1) Upload CSV file manually to S3
-2) Above event triggers `ElasticSearchIndexerFunction`  Lambda 
+2) Above event triggers `ElasticSearchIndexerFunction`  Lambda
 3) `ElasticSearchIndexerFunction` Lambda does the following,
     - reads the file and converts each CSV record into JSON format
     - Use Elastic Search SDK bulk API to load records into Elastic Search
